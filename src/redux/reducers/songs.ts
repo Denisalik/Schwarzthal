@@ -17,8 +17,8 @@ const initialState: SongsState = {
 };
 
 export const reducer = (
-  action: ActionTypes,
   state: SongsState = initialState,
+  action: ActionTypes,
 ): SongsState => {
   switch (action.type) {
     case ActionStrings.FETCHSONGS:

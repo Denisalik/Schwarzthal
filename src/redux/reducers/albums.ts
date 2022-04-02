@@ -1,5 +1,6 @@
 import { Albums } from "../interfaces/Entities";
 import { ActionStrings, ActionTypes } from "../actionTypes";
+import { Reducer } from "redux";
 
 interface AlbumsState {
   albums: Albums;
@@ -17,8 +18,8 @@ const initialState: AlbumsState = {
 };
 
 export const reducer = (
+  state = initialState,
   action: ActionTypes,
-  state: AlbumsState = initialState,
 ): AlbumsState => {
   switch (action.type) {
     case ActionStrings.FETCHALBUMS:

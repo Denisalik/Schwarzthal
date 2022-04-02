@@ -1,12 +1,12 @@
 import axios from "axios";
-import { AppDispatch } from "../store";
+import { Dispatch } from "redux";
 import { actions } from "../actions";
 import { Songs } from "../interfaces/Entities";
 import { searchForSong } from "../api";
 
 export const fetchSongs =
   (term: string, limit: number = 50) =>
-  async (dispatch: AppDispatch) => {
+  async (dispatch: Dispatch) => {
     dispatch(actions.fetchSongs());
     return axios
       .get<Songs>(searchForSong(term, limit))

@@ -1,4 +1,4 @@
-import { Albums, Songs } from "./interfaces/Entities";
+import { Albums, Song, Songs } from "./interfaces/Entities";
 
 export enum ActionStrings {
   FETCHSONGSSUCCESS = "FETCHSONGSSUCCESS",
@@ -8,6 +8,8 @@ export enum ActionStrings {
   FETCHALBUMS = "FETCHALBUMS",
   FETCHALBUMSSUCCESS = "FETCHALBUMSSUCCESS",
   FETCHALBUMSERROR = "FETCHALBUMSERROR",
+  LIKESONG = "LIKESONG",
+  DISLIKESONG = "DISLIKESONG",
 }
 
 interface fetchAlbums {
@@ -38,10 +40,22 @@ interface fetchSongs {
   type: ActionStrings.FETCHSONGS;
 }
 
+interface likeSong {
+  type: ActionStrings.LIKESONG;
+  payload: Song;
+}
+
+interface dislikeSong {
+  type: ActionStrings.DISLIKESONG;
+  payload: Song;
+}
+
 export type ActionTypes =
   | fetchSongs
   | fetchSongsSuccess
   | fetchSongsError
   | fetchAlbums
   | fetchAlbumsError
-  | fetchAlbumsSuccess;
+  | fetchAlbumsSuccess
+  | likeSong
+  | dislikeSong;
