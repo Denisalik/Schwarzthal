@@ -2,7 +2,7 @@ import { Albums } from "../interfaces/Entities";
 import { ActionStrings } from "../actionTypes";
 
 export const actions = {
-  fetchAlbumsSuccess: (payload: Albums) => ({
+  fetchAlbumsSuccess: (payload: Albums[]) => ({
     type: ActionStrings.FETCHALBUMSSUCCESS,
     payload,
   }),

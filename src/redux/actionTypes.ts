@@ -18,7 +18,7 @@ interface fetchAlbums {
 
 interface fetchAlbumsSuccess {
   type: ActionStrings.FETCHALBUMSSUCCESS;
-  payload: Albums;
+  payload: Albums[];
 }
 
 interface fetchAlbumsError {

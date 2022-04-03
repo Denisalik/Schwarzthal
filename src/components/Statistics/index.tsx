@@ -1,41 +1,89 @@
-import React  from "react";
-import { DataSet, Network } from "vis-network";
-import { useAppSelector } from "../../lib/hooks";
+import React from "react";
+import { Network } from "vis-network/peer/esm/vis-network";
+import { DataSet } from "vis-data/peer/esm/vis-data";
+
+import { useAppActions, useAppSelector } from "../../lib/hooks";
+import { Album } from "../../redux/interfaces/Entities";
 
 const Statistics: React.FC = () => {
   const graph = React.useRef() as React.MutableRefObject<HTMLDivElement>;
+  const { albums, loading, error } = useAppSelector((state) => state.albums);
   const history = useAppSelector((state) => state.history);
-  // const nodes = new DataSet([
-  //   { id: 1, label: "Node 1" },
-  //   { id: 2, label: "Node 2" },
-  //   { id: 3, label: "Node 3" },
-  //   { id: 4, label: "Node 4" },
-  //   { id: 5, label: "Node 5" },
-  // ]);
-  //
-  // // create an array with edges
-  // const edges = new DataSet([
-  //   { from: 1, to: 3 },
-  //   { from: 1, to: 2 },
-  //   { from: 2, to: 4 },
-  //   { from: 2, to: 5 },
-  //   { from: 3, to: 3 },
-  // ]);
-  //
-  // // create a network
-  // const container = graph.current;
-  // const data = {
-  //   nodes,
-  //   edges,
-  // };
-  // const options = {};
-  // const network = new Network(container, data, options);
+  const { fetchAlbums } = useAppActions();
+  React.useEffect(() => {
+    let artists: { id: number; count: number }[] = [];
+    history.songs.forEach((song) => {
+      const index = artists.findIndex((art) => art.id === song.artistId);
+      if (index === -1) artists.push({ id: song.artistId, count: 1 });
+      else artists[index].count += 1;
+    });
+    artists = artists.sort((a, b) => b.count - a.count).slice(0, 5);
+    fetchAlbums(artists.map((artist) => artist.id));
+  }, [history.songs]);
+  React.useEffect(() => {
+    if (albums.length) {
+      let allAlbums: Album[] = [];
+      albums.map((album) => album.results).forEach((album) => allAlbums.push(...album));
+      allAlbums = allAlbums.filter(
+        (album) =>
+          album.wrapperType === "artist" || (album.trackCount && album.trackCount > 1),
+      );
+
+      // album with 2 artists that connects to Zach, but not Jack
+
+      // amgArtistId: 649174
+      // artistId: 79223185
+      // artistName: "Zach Gill & Jack Johnson"
+      // collectionId: 1445304981
+      // collectionName: "Family - Single"
+      // collectionType: "Album"
+      // releaseDate: "2008-01-01T08:00:00Z"
+      // trackCount: 2
+
+      const nodes = new DataSet([
+        ...allAlbums.map((album) =>
+          album.wrapperType === "artist"
+            ? {
+                fixed: true,
+                id: album.artistId,
+                label: album.artistName,
+              }
+            : {
+                id: album.collectionId,
+                label: album.collectionName,
+              },
+        ),
+      ]);
+      const edges = new DataSet(
+        allAlbums.map((album, index) => ({
+          to: album.collectionId,
+          from: album.artistId,
+          id: index,
+        })),
+      );
+      const container = graph.current;
+      const data = {
+        nodes,
+        edges,
+      };
+      const options = {
+        physics: {
+          barnesHut: {
+            springConstant: 0,
+            avoidOverlap: 1,
+          },
+        },
+      };
+
+      const network = new Network(container, data, options);
+    }
+  }, [albums]);
+
   return (
     <div
       ref={graph}
       style={{
-        width: "600px",
-        height: "400px",
+        height: "90vh",
         border: "1px solid lightgray",
       }}
     />
