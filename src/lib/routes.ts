@@ -1,19 +1,22 @@
 import { PathStrings } from "./urls";
+import Statistics from "../components/Statistics";
+import History from "../components/History";
+import Search from "../components/Search";
 
-// const AuthComponent = Auth;
-// const HomeComponent = Home;
-//
 export const routes = [
   {
+    name: "Search",
     path: PathStrings.SEARCH,
-    // element: ,
+    element: Search,
   },
   {
+    name: "History",
     path: PathStrings.HISTORY,
-    // element: HomeComponent,
+    element: History,
   },
   {
+    name: "Statistics",
     path: PathStrings.STATISTICS,
-    // element:
+    element: Statistics,
   },
 ];

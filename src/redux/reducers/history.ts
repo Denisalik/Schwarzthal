@@ -2,7 +2,7 @@ import { Song } from "../interfaces/Entities";
 import { ActionStrings, ActionTypes } from "../actionTypes";
 
 interface HistoryState {
-  songs: Song[];
+  songs: (Song & { createDate: Date })[];
 }
 
 const initialState: HistoryState = {
@@ -15,7 +15,10 @@ export const reducer = (
 ): HistoryState => {
   switch (action.type) {
     case ActionStrings.LIKESONG:
-      return { ...state, songs: [...state.songs, action.payload] };
+      return {
+        ...state,
+        songs: [...state.songs, { ...action.payload, createDate: new Date() }],
+      };
     case ActionStrings.DISLIKESONG:
       return {
         ...state,
