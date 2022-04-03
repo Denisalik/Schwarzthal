@@ -3,7 +3,7 @@
 After entering song name, it will lazily send get requests to the iTunes Search API.
 It is implemented using useDebounce hook, after 1 sec send request with last entered song name.
 #### Statistics
-to be continued...
+For every favourite track, it scans artistId, add them to array, count them, sort by count and slice 5 elements. Fetch all albums by these 5 artists, discard all singles and make a graph with all albums and artists as nodes and edges connected by artistId of an album, so albums and artists are connected.
 ## Installation:
 Install NodeJS(version provided in `.nvmrc`)
 
